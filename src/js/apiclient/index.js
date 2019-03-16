@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 import secrets from '../../../config/secrets.js';
-import paramters from '../../../config/parameters.js';
+import parameters from '../../../config/parameters.js';
 
 export default class ApiClient {
   static get(url, params = {}) {
     return axios({
       url,
       method: 'get',
-      baseURL: paramters.ATLASSIAN_DOMAIN,
+      baseURL: parameters.ATLASSIAN_DOMAIN,
       params,
       auth: {
         username: secrets.JIRA_USER_EMAIL,
@@ -21,7 +21,7 @@ export default class ApiClient {
     return axios({
       url,
       method: 'post',
-      baseURL: paramters.ATLASSIAN_DOMAIN,
+      baseURL: parameters.ATLASSIAN_DOMAIN,
       params,
       data,
       auth: {
