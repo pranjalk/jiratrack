@@ -35,6 +35,7 @@
         1,
         "never"
     ],
+    "no-console": 0,
     "no-cond-assign": 1,
     "no-debugger": 1,
     "no-dupe-args": 1,
