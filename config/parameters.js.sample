@@ -1,0 +1,6 @@
+const parameters = {
+  ATLASSIAN_DOMAIN: 'sample.atlassian.net',
+  JIRA_BOARD: 'BUGBOARD'
+};
+
+export default parameters;
