@@ -20,14 +20,15 @@ JIRA REST API https://developer.atlassian.com/cloud/jira/platform/rest/v3
 
 ### Creating reports
 
-  ##### Weeks reporting (Max Issues => 100)
+##### Weeks reporting (Max Issues => 100)
 
-    - run `npm run report -- weeks <weeks>` for report of today to last x weeks
-    - run `npm run report -- crweeks <weeks>` for report of today to last x weeks for consumer reported bugs
+- `npm run report -- weeks <weeks>` for report from today to last x weeks
+- `npm run report -- crweeks <weeks>` for report from today to last x weeks for consumer reported bugs
 
-  ##### Days Interval (Max Issues  => 100)
-    - run `npm run report -- d2d <dateFrom> <dateTo>` for report of dateFrom ~ dateTo
-    - run `npm run report -- crd2d <dateFrom> <dateTo>` for report of dateFrom ~ dateTo for consumer reported bugs
+##### Days Interval (Max Issues  => 100)
+
+- `npm run report -- d2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo
+- `npm run report -- crd2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo for consumer reported bugs
 
 #### POC for DXBUG Board for Practo Technologies Pvt. Ltd.
 
