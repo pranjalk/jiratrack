@@ -1,5 +1,5 @@
 const parameters = {
-  ATLASSIAN_DOMAIN: 'sample.atlassian.net',
+  ATLASSIAN_DOMAIN: 'https://sample.atlassian.net',
   JIRA_BOARD: 'BUGBOARD'
 };
 
