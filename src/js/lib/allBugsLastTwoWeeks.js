@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import ApiClient from '../apiclient/index.js';
 import parameters from '../../../config/parameters.js';
-import { JIRA_SEARCH } from '../constants/url_endpoints.js';
+import { JIRA_SEARCH } from '../constants/urlEndpoints.js';
 import {
   CRITICAL,
   MAJOR,
