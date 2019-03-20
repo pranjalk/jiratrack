@@ -11,7 +11,7 @@ require('@babel/register')({
   ]
 });
 
-const BugsInLastTwoWeeks = require('./src/js/lib/all_bugs_last_two_weeks.js');
+const BugsInLastTwoWeeks = require('./src/js/lib/allBugsLastTwoWeeks.js');
 
 const bugsInLastTwoWeeks = new BugsInLastTwoWeeks();
 
