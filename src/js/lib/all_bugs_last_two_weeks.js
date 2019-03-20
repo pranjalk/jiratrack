@@ -4,7 +4,17 @@ import moment from 'moment';
 import ApiClient from '../apiclient/index.js';
 import parameters from '../../../config/parameters.js';
 import { JIRA_SEARCH } from '../constants/url_endpoints.js';
-import { MAJOR, MINOR, CRITICAL } from '../constants/priorities.js';
+import {
+  CRITICAL,
+  MAJOR,
+  MINOR,
+  NORMAL,
+  TRIVIAL,
+  MINOR_PRIORITIES_SET,
+  MAJOR_PRIORITIES_SET,
+  CRITICAL_PRIORITIES_SET,
+  ALL_PRIORITIES_SET
+} from '../constants/priorities.js';
 
 export default class BugsInLastTwoWeeks {
   constructor() {
@@ -35,41 +45,41 @@ export default class BugsInLastTwoWeeks {
       critical: {
         resolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate !== null && fields.priority.name === CRITICAL;
+          return fields.resolutiondate !== null && CRITICAL_PRIORITIES_SET.includes(fields.priority.name);
         }).length,
         unresolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate === null && fields.priority.name === CRITICAL;
+          return fields.resolutiondate === null && CRITICAL_PRIORITIES_SET.includes(fields.priority.name);
         }).length
       },
       major: {
         resolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate !== null && fields.priority.name === MAJOR;
+          return fields.resolutiondate !== null && MAJOR_PRIORITIES_SET.includes(fields.priority.name);
         }).length,
         unresolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate === null && fields.priority.name === MAJOR;
+          return fields.resolutiondate === null && MAJOR_PRIORITIES_SET.includes(fields.priority.name);
         }).length
       },
       minor: {
         resolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate !== null && fields.priority.name === MINOR;
+          return fields.resolutiondate !== null && MINOR_PRIORITIES_SET.includes(fields.priority.name);
         }).length,
         unresolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate === null && fields.priority.name === MINOR;
+          return fields.resolutiondate === null && MINOR_PRIORITIES_SET.includes(fields.priority.name);
         }).length
       },
       total: {
         resolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate !== null && [MAJOR, MINOR, CRITICAL].includes(fields.priority.name);
+          return fields.resolutiondate !== null && ALL_PRIORITIES_SET.includes(fields.priority.name);
         }).length,
         unresolved: issues.filter(issue => {
           const { fields } = issue;
-          return fields.resolutiondate === null && [MAJOR, MINOR, CRITICAL].includes(fields.priority.name);
+          return fields.resolutiondate === null && ALL_PRIORITIES_SET.includes(fields.priority.name);
         }).length
       }
     });
@@ -131,6 +141,8 @@ export default class BugsInLastTwoWeeks {
           }
           break;
         }
+        case NORMAL:
+        case TRIVIAL:
         case MINOR: {
           if (resolved.isBefore(created.add(5, 'days'))) {
             consoleTable[MINOR].system_restore += 1;
