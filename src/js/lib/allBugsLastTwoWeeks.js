@@ -8,8 +8,9 @@ import resVsUnrescount from '../reporters/resvsunres/count.js';
 import resVsUnresvsPriorities from '../reporters/resvsunres/priorities.js';
 import resVsUnResVsAssignees from '../reporters/resvsunres/assignees.js';
 
-import slaVsPriorities from '../reporters/sla/priorities.js';
 import slaVsCount from '../reporters/sla/count.js';
+import slaVsPriorities from '../reporters/sla/priorities.js';
+import slaVsAssignees from '../reporters/sla/assignees.js';
 
 export default class BugsInLastTwoWeeks {
   constructor() {
@@ -44,6 +45,7 @@ export default class BugsInLastTwoWeeks {
       resVsUnResVsAssignees(res.data.issues);
       slaVsPriorities(res.data.issues);
       slaVsCount(res.data.issues);
+      slaVsAssignees(res.data.issues);
     }).catch((err) => {
       console.log(err);
       console.log(chalk.red.inverse('API CALL FAILED!'));
