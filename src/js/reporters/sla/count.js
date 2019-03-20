@@ -15,26 +15,8 @@ import {
   MINOR_SLA
 } from '../../constants/reporterSLAs.js';
 
-export default function slaVsPriorities(issues) {
+export default function slaVsCount(issues) {
   const consoleTable = {
-    [CRITICAL]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
-    [MAJOR]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
-    [MINOR]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
     TOTAL: {
       system_restore: 0,
       perm_fix: 0,
@@ -42,7 +24,7 @@ export default function slaVsPriorities(issues) {
       violating: 0
     }
   };
-
+  // Get violations for unresolved issues as well
   const now = moment();
 
   issues.forEach(issue => {
@@ -58,17 +40,13 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = CRITICAL_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[CRITICAL].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[CRITICAL].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
-          consoleTable[CRITICAL].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[CRITICAL].violating += 1;
         consoleTable.TOTAL.violating += 1;
       }
       break;
@@ -78,17 +56,13 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[MAJOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[MAJOR].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
-          consoleTable[MAJOR].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[MAJOR].violating += 1;
         consoleTable.TOTAL.violating += 1;
       }
       break;
@@ -100,17 +74,13 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[MINOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[MINOR].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
-          consoleTable[MINOR].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[MINOR].violating += 1;
         consoleTable.TOTAL.violating += 1;
       }
       break;
@@ -120,6 +90,6 @@ export default function slaVsPriorities(issues) {
     }
     }
   });
-  console.log(chalk.green('SLA Violations vs Priorities'));
+  console.log(chalk.green('SLA Violations vs Count'));
   console.table(consoleTable);
 }

@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import moment from 'moment';
+import parameters from '../../../../config/parameters.js';
 
 import {
   CRITICAL,
@@ -15,34 +16,8 @@ import {
   MINOR_SLA
 } from '../../constants/reporterSLAs.js';
 
-export default function slaVsPriorities(issues) {
-  const consoleTable = {
-    [CRITICAL]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
-    [MAJOR]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
-    [MINOR]: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    },
-    TOTAL: {
-      system_restore: 0,
-      perm_fix: 0,
-      exceeded: 0,
-      violating: 0
-    }
-  };
-
+export default function bugsViolatingSLA(issues) {
+  let consoleTable = {};
   const now = moment();
 
   issues.forEach(issue => {
@@ -58,18 +33,21 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = CRITICAL_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[CRITICAL].system_restore += 1;
-          consoleTable.TOTAL.system_restore += 1;
+          break;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[CRITICAL].perm_fix += 1;
-          consoleTable.TOTAL.perm_fix += 1;
+          break;
         } else {
-          consoleTable[CRITICAL].exceeded += 1;
-          consoleTable.TOTAL.exceeded += 1;
+          break;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[CRITICAL].violating += 1;
-        consoleTable.TOTAL.violating += 1;
+        const tableKey = `${parameters.ATLASSIAN_DOMAIN}/browse/${issue.key}`;
+        consoleTable = {
+          ...consoleTable,
+          [tableKey]: {
+            assignee: issue.fields.assignee.key,
+            priority: issue.fields.priority.name
+          }
+        };
       }
       break;
     }
@@ -78,18 +56,21 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[MAJOR].system_restore += 1;
-          consoleTable.TOTAL.system_restore += 1;
+          break;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[MAJOR].perm_fix += 1;
-          consoleTable.TOTAL.perm_fix += 1;
+          break;
         } else {
-          consoleTable[MAJOR].exceeded += 1;
-          consoleTable.TOTAL.exceeded += 1;
+          break;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[MAJOR].violating += 1;
-        consoleTable.TOTAL.violating += 1;
+        const tableKey = `${parameters.ATLASSIAN_DOMAIN}/browse/${issue.key}`;
+        consoleTable = {
+          ...consoleTable,
+          [tableKey]: {
+            assignee: issue.fields.assignee.key,
+            priority: issue.fields.priority.name
+          }
+        };
       }
       break;
     }
@@ -100,18 +81,21 @@ export default function slaVsPriorities(issues) {
       const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          consoleTable[MINOR].system_restore += 1;
-          consoleTable.TOTAL.system_restore += 1;
+          break;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          consoleTable[MINOR].perm_fix += 1;
-          consoleTable.TOTAL.perm_fix += 1;
+          break;
         } else {
-          consoleTable[MINOR].exceeded += 1;
-          consoleTable.TOTAL.exceeded += 1;
+          break;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        consoleTable[MINOR].violating += 1;
-        consoleTable.TOTAL.violating += 1;
+        const tableKey = `${parameters.ATLASSIAN_DOMAIN}/browse/${issue.key}`;
+        consoleTable = {
+          ...consoleTable,
+          [tableKey]: {
+            assignee: issue.fields.assignee.key,
+            priority: issue.fields.priority.name
+          }
+        };
       }
       break;
     }
@@ -120,6 +104,6 @@ export default function slaVsPriorities(issues) {
     }
     }
   });
-  console.log(chalk.green('SLA Violations vs Priorities'));
+  console.log(chalk.green('Bugs Violating SLA'));
   console.table(consoleTable);
 }
