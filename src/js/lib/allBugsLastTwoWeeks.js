@@ -7,6 +7,7 @@ import { JIRA_SEARCH } from '../constants/urlEndpoints.js';
 import resVsUnrescount from '../reporters/resvsunres/count.js';
 import resVsUnresvsPriorities from '../reporters/resvsunres/priorities.js';
 import slaVsPriorities from '../reporters/sla/priorities.js';
+import resVsUnResVsAssignees from '../reporters/resvsunres/assignees.js';
 
 export default class BugsInLastTwoWeeks {
   constructor() {
@@ -39,6 +40,7 @@ export default class BugsInLastTwoWeeks {
       resVsUnrescount(res.data.issues);
       resVsUnresvsPriorities(res.data.issues);
       slaVsPriorities(res.data.issues);
+      resVsUnResVsAssignees(res.data.issues);
     }).catch((err) => {
       console.log(err);
       console.log(chalk.red.inverse('API CALL FAILED!'));
