@@ -12,6 +12,8 @@ import slaVsCount from '../reporters/sla/count.js';
 import slaVsPriorities from '../reporters/sla/priorities.js';
 import slaVsAssignees from '../reporters/sla/assignees.js';
 
+import bugsViolatingSLA from '../reporters/bugs/violatingSLA.js';
+
 export default class BugsInLastTwoWeeks {
   constructor() {
     this.jqlQuery = `project = ${parameters.JIRA_BOARD} AND issuetype = Bug AND createdDate > startOfWeek(-2w) ORDER BY created DESC`;
@@ -46,6 +48,7 @@ export default class BugsInLastTwoWeeks {
       slaVsPriorities(res.data.issues);
       slaVsCount(res.data.issues);
       slaVsAssignees(res.data.issues);
+      bugsViolatingSLA(res.data.issues);
     }).catch((err) => {
       console.log(err);
       console.log(chalk.red.inverse('API CALL FAILED!'));
