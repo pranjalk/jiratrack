@@ -4,19 +4,20 @@ import ApiClient from '../apiclient/index.js';
 import parameters from '../../../config/parameters.js';
 import { JIRA_SEARCH } from '../constants/urlEndpoints.js';
 
-import resVsUnrescount from '../reporters/resvsunres/count.js';
 import resVsUnresvsPriorities from '../reporters/resvsunres/priorities.js';
 import resVsUnResVsAssignees from '../reporters/resvsunres/assignees.js';
 
-import slaVsCount from '../reporters/sla/count.js';
 import slaVsPriorities from '../reporters/sla/priorities.js';
-import slaVsAssignees from '../reporters/sla/assignees.js';
 
 import bugsViolatingSLA from '../reporters/bugs/violatingSLA.js';
 
 export default class BugsInLastTwoWeeks {
-  constructor() {
-    this.jqlQuery = `project = ${parameters.JIRA_BOARD} AND issuetype = Bug AND createdDate > startOfWeek(-2w) ORDER BY created DESC`;
+  constructor(count) {
+    this.weekCount = 2;
+    if (count) {
+      this.weekCount = count;
+    }
+    this.jqlQuery = `project = ${parameters.JIRA_BOARD} AND issuetype = Bug AND createdDate > startOfWeek(-${this.weekCount}w) ORDER BY created DESC`;
     this.run = this.run.bind(this);
   }
 
@@ -40,18 +41,15 @@ export default class BugsInLastTwoWeeks {
       ]
     }).then((res) => {
       console.log(`${chalk.green('Data fetching successful...')}`);
-      console.log(`${chalk.green('Generating report for last two weeks...')}`);
+      console.log(`${chalk.green(`Generating report for last ${this.weekCount} weeks...`)}`);
       console.log(`${chalk.yellow('Total issues (limited to 100)')}: ${chalk.blueBright(res.data.issues.length)}`);
-      resVsUnrescount(res.data.issues);
       resVsUnresvsPriorities(res.data.issues);
       resVsUnResVsAssignees(res.data.issues);
       slaVsPriorities(res.data.issues);
-      slaVsCount(res.data.issues);
-      slaVsAssignees(res.data.issues);
       bugsViolatingSLA(res.data.issues);
     }).catch((err) => {
-      console.log(err);
       console.log(chalk.red.inverse('API CALL FAILED!'));
+      console.error(err);
     }).finally(() => {
       console.log(chalk.green('Report Generated Successfully'));
     });
