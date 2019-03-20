@@ -48,7 +48,6 @@ export default class BugsInLastTwoWeeks {
       slaVsPriorities(res.data.issues);
       bugsViolatingSLA(res.data.issues);
     }).catch((err) => {
-      console.log(chalk.red.inverse('API CALL FAILED!'));
       console.error(err);
     }).finally(() => {
       console.log(chalk.green('Report Generated Successfully'));
