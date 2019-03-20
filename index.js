@@ -12,6 +12,7 @@ require('@babel/register')({
 });
 
 const BugsInLastXWeeks = require('./src/js/lib/allBugsLastXWeeks.js');
+const AllbugsDayToDay = require('./src/js/lib/allBugsDayToDay.js');
 
 switch (process.argv[2]) {
 case 'weeks': {
@@ -21,6 +22,17 @@ case 'weeks': {
     bugsInLastTwoWeeks.run();
   } else {
     console.error(Error('Invalid Number passed, count has to be positive integer'));
+  }
+  break;
+}
+case 'd2d': {
+  const dateFrom = process.argv[3];
+  const dateTo = process.argv[4];
+  if (dateFrom && dateTo) {
+    const allBugsDayToDay = new AllbugsDayToDay(dateFrom, dateTo);
+    allBugsDayToDay.run();
+  } else {
+    console.log('Day To Day requires dates in "yyyy-mm-dd" format => dateFrom dateTo');
   }
   break;
 }
