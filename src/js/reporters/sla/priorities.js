@@ -9,6 +9,12 @@ import {
   TRIVIAL
 } from '../../constants/priorities.js';
 
+import {
+  CRITICAL_SLA,
+  MAJOR_SLA,
+  MINOR_SLA
+} from '../../constants/reporterSLAs.js';
+
 export default function slaVsPriorities(issues) {
   const consoleTable = {
     [CRITICAL]: {
@@ -40,10 +46,12 @@ export default function slaVsPriorities(issues) {
       const resolved = moment(fields.resolutiondate);
       switch (fields.priority.name) {
       case CRITICAL: {
-        if (resolved.isBefore(created.add(4, 'hours'))) {
+        const { unit: sysRestoreUnit, value: sysRestoreValue } = CRITICAL_SLA.SYSTEM_RESTORE;
+        const { unit: permFixUnit, value: permFixValue } = CRITICAL_SLA.PERMANENT_FIX;
+        if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[CRITICAL].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
-        } else if (resolved.isBefore(created.add(96, 'hours'))) {
+        } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
           consoleTable[CRITICAL].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
@@ -53,10 +61,12 @@ export default function slaVsPriorities(issues) {
         break;
       }
       case MAJOR: {
-        if (resolved.isBefore(created.add(48, 'hours'))) {
+        const { unit: sysRestoreUnit, value: sysRestoreValue } = MAJOR_SLA.SYSTEM_RESTORE;
+        const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
+        if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[MAJOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
-        } else if (resolved.isBefore(created.add(10, 'days'))) {
+        } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
           consoleTable[MAJOR].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
@@ -68,10 +78,12 @@ export default function slaVsPriorities(issues) {
       case NORMAL:
       case TRIVIAL:
       case MINOR: {
-        if (resolved.isBefore(created.add(5, 'days'))) {
+        const { unit: sysRestoreUnit, value: sysRestoreValue } = MINOR_SLA.SYSTEM_RESTORE;
+        const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
+        if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[MINOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
-        } else if (resolved.isBefore(created.add(30, 'days'))) {
+        } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
           consoleTable[MINOR].perm_fix += 1;
           consoleTable.TOTAL.perm_fix += 1;
         } else {
