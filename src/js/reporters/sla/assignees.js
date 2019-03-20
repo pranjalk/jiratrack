@@ -21,10 +21,11 @@ export default function slaVsAssignees(issues) {
   const now = moment();
   issues.forEach(issue => {
     const { fields } = issue;
-    if (!(fields.assignee.key in tableData)) {
+    const keyToUse = fields.assignee ? fields.assignee.key : 'unassigned';
+    if (!(keyToUse in tableData)) {
       tableData = {
         ...tableData,
-        [fields.assignee.key]: {
+        [keyToUse]: {
           system_restore: 0,
           perm_fix: 0,
           exceeded: 0,
@@ -46,12 +47,12 @@ export default function slaVsAssignees(issues) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           tableData[fields.assignee.key].system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          tableData[fields.assignee.key].perm_fix += 1;
+          tableData[keyToUse].perm_fix += 1;
         } else {
-          tableData[fields.assignee.key].exceeded += 1;
+          tableData[keyToUse].exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        tableData[fields.assignee.key].violating += 1;
+        tableData[keyToUse].violating += 1;
       }
       break;
     }
@@ -60,14 +61,14 @@ export default function slaVsAssignees(issues) {
       const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          tableData[fields.assignee.key].system_restore += 1;
+          tableData[keyToUse].system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          tableData[fields.assignee.key].perm_fix += 1;
+          tableData[keyToUse].perm_fix += 1;
         } else {
-          tableData[fields.assignee.key].exceeded += 1;
+          tableData[keyToUse].exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        tableData[fields.assignee.key].violating += 1;
+        tableData[keyToUse].violating += 1;
       }
       break;
     }
@@ -78,14 +79,14 @@ export default function slaVsAssignees(issues) {
       const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
       if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
-          tableData[fields.assignee.key].system_restore += 1;
+          tableData[keyToUse].system_restore += 1;
         } else if (resolved.isBefore(created.add(permFixValue, permFixUnit))) {
-          tableData[fields.assignee.key].perm_fix += 1;
+          tableData[keyToUse].perm_fix += 1;
         } else {
-          tableData[fields.assignee.key].exceeded += 1;
+          tableData[keyToUse].exceeded += 1;
         }
       } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
-        tableData[fields.assignee.key].violating += 1;
+        tableData[keyToUse].violating += 1;
       }
       break;
     }

@@ -18,9 +18,17 @@ JIRA REST API https://developer.atlassian.com/cloud/jira/platform/rest/v3
   - Replace in secrets your email and API Token from https://id.atlassian.com/manage/api-tokens
   - Replace in parameters, your atlassian domain & bug board
 
-### Create report
+### Creating reports
 
-  - run `npm run report` to generate report
+##### Weeks reporting (Max Issues => 100)
+
+- `npm run report -- weeks <weeks>` for report from today to last x weeks
+- `npm run report -- crweeks <weeks>` for report from today to last x weeks for consumer reported bugs
+
+##### Days Interval (Max Issues  => 100)
+
+- `npm run report -- d2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo
+- `npm run report -- crd2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo for consumer reported bugs
 
 #### POC for DXBUG Board for Practo Technologies Pvt. Ltd.
 

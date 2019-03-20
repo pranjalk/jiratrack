@@ -44,7 +44,7 @@ export default function bugsViolatingSLA(issues) {
         consoleTable = {
           ...consoleTable,
           [tableKey]: {
-            assignee: issue.fields.assignee.key,
+            assignee: issue.fields.assignee ? issue.fields.assignee.key : 'unassigned',
             priority: issue.fields.priority.name
           }
         };
@@ -67,7 +67,7 @@ export default function bugsViolatingSLA(issues) {
         consoleTable = {
           ...consoleTable,
           [tableKey]: {
-            assignee: issue.fields.assignee.key,
+            assignee: issue.fields.assignee ? issue.fields.assignee.key : 'unassigned',
             priority: issue.fields.priority.name
           }
         };
@@ -92,7 +92,7 @@ export default function bugsViolatingSLA(issues) {
         consoleTable = {
           ...consoleTable,
           [tableKey]: {
-            assignee: issue.fields.assignee.key,
+            assignee: issue.fields.assignee ? issue.fields.assignee.key : 'unassigned',
             priority: issue.fields.priority.name
           }
         };
