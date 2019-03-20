@@ -20,34 +20,43 @@ export default function slaVsPriorities(issues) {
     [CRITICAL]: {
       system_restore: 0,
       perm_fix: 0,
-      exceeded: 0
+      exceeded: 0,
+      violating: 0
     },
     [MAJOR]: {
       system_restore: 0,
       perm_fix: 0,
-      exceeded: 0
+      exceeded: 0,
+      violating: 0
     },
     [MINOR]: {
       system_restore: 0,
       perm_fix: 0,
-      exceeded: 0
+      exceeded: 0,
+      violating: 0
     },
     TOTAL: {
       system_restore: 0,
       perm_fix: 0,
-      exceeded: 0
+      exceeded: 0,
+      violating: 0
     }
   };
 
+  const now = moment();
+
   issues.forEach(issue => {
     const { fields } = issue;
+    const created = moment(fields.created);
+    let resolved = null;
     if (fields.resolutiondate) {
-      const created = moment(fields.created);
-      const resolved = moment(fields.resolutiondate);
-      switch (fields.priority.name) {
-      case CRITICAL: {
-        const { unit: sysRestoreUnit, value: sysRestoreValue } = CRITICAL_SLA.SYSTEM_RESTORE;
-        const { unit: permFixUnit, value: permFixValue } = CRITICAL_SLA.PERMANENT_FIX;
+      resolved = moment(fields.resolutiondate);
+    }
+    switch (fields.priority.name) {
+    case CRITICAL: {
+      const { unit: sysRestoreUnit, value: sysRestoreValue } = CRITICAL_SLA.SYSTEM_RESTORE;
+      const { unit: permFixUnit, value: permFixValue } = CRITICAL_SLA.PERMANENT_FIX;
+      if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[CRITICAL].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
@@ -58,11 +67,16 @@ export default function slaVsPriorities(issues) {
           consoleTable[CRITICAL].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
-        break;
+      } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
+        consoleTable[CRITICAL].violating += 1;
+        consoleTable.TOTAL.violating += 1;
       }
-      case MAJOR: {
-        const { unit: sysRestoreUnit, value: sysRestoreValue } = MAJOR_SLA.SYSTEM_RESTORE;
-        const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
+      break;
+    }
+    case MAJOR: {
+      const { unit: sysRestoreUnit, value: sysRestoreValue } = MAJOR_SLA.SYSTEM_RESTORE;
+      const { unit: permFixUnit, value: permFixValue } = MAJOR_SLA.PERMANENT_FIX;
+      if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[MAJOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
@@ -73,13 +87,18 @@ export default function slaVsPriorities(issues) {
           consoleTable[MAJOR].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
-        break;
+      } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
+        consoleTable[MAJOR].violating += 1;
+        consoleTable.TOTAL.violating += 1;
       }
-      case NORMAL:
-      case TRIVIAL:
-      case MINOR: {
-        const { unit: sysRestoreUnit, value: sysRestoreValue } = MINOR_SLA.SYSTEM_RESTORE;
-        const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
+      break;
+    }
+    case NORMAL:
+    case TRIVIAL:
+    case MINOR: {
+      const { unit: sysRestoreUnit, value: sysRestoreValue } = MINOR_SLA.SYSTEM_RESTORE;
+      const { unit: permFixUnit, value: permFixValue } = MINOR_SLA.PERMANENT_FIX;
+      if (resolved) {
         if (resolved.isBefore(created.add(sysRestoreValue, sysRestoreUnit))) {
           consoleTable[MINOR].system_restore += 1;
           consoleTable.TOTAL.system_restore += 1;
@@ -90,14 +109,17 @@ export default function slaVsPriorities(issues) {
           consoleTable[MINOR].exceeded += 1;
           consoleTable.TOTAL.exceeded += 1;
         }
-        break;
+      } else if (now.isAfter(created.add(permFixValue, permFixUnit))) {
+        consoleTable[MINOR].violating += 1;
+        consoleTable.TOTAL.violating += 1;
       }
-      default: {
-        break;
-      }
-      }
+      break;
+    }
+    default: {
+      break;
+    }
     }
   });
-  console.log(chalk.green('SLA Voilations vs Priorities'));
+  console.log(chalk.green('SLA Violations vs Priorities'));
   console.table(consoleTable);
 }

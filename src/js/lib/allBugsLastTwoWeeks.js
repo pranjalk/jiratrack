@@ -41,8 +41,8 @@ export default class BugsInLastTwoWeeks {
       console.log(`${chalk.yellow('Total issues (limited to 100)')}: ${chalk.blueBright(res.data.issues.length)}`);
       resVsUnrescount(res.data.issues);
       resVsUnresvsPriorities(res.data.issues);
-      slaVsPriorities(res.data.issues);
       resVsUnResVsAssignees(res.data.issues);
+      slaVsPriorities(res.data.issues);
       slaVsCount(res.data.issues);
     }).catch((err) => {
       console.log(err);
