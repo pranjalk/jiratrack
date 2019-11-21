@@ -30,6 +30,5 @@ JIRA REST API https://developer.atlassian.com/cloud/jira/platform/rest/v3
 - `npm run report -- d2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo
 - `npm run report -- crd2d <dateFrom> <dateTo>` for report from dateFrom ~ dateTo for consumer reported bugs
 
-#### POC for DXBUG Board for Practo Technologies Pvt. Ltd.
 
-&copy; 2019 Pranjal Kumar / Practo Technologies Pvt. Ltd.
+&copy; 2019 Pranjal Kumar
