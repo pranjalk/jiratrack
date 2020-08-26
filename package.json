@@ -42,7 +42,7 @@
     "babel-plugin-object-assign": "1.2.1",
     "chalk": "2.4.2",
     "debug": "4.1.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.19",
     "moment": "2.24.0",
     "path": "0.12.7",
     "qs": "6.6.0"
