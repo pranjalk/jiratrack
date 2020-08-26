@@ -12,7 +12,7 @@ JIRA REST API https://developer.atlassian.com/cloud/jira/platform/rest/v3
 
 ### Setup Commands
   - Requires Node version 10 and above
-  - Install packages `npm install`
+  - Install packages `npm ci`
   - Copy secrets `cp ./config/secrets.js.sample ./config/secrets.js`
   - Copy parameters `cp ./config/parameters.js.sample ./config/parameters.js`
   - Replace in secrets your email and API Token from https://id.atlassian.com/manage/api-tokens
