@@ -45,7 +45,7 @@
     "lodash": "4.17.19",
     "moment": "2.24.0",
     "path": "0.12.7",
-    "qs": "6.6.0"
+    "qs": "6.6.1"
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",
